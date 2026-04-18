@@ -15,7 +15,6 @@
 	const POPUP_LABEL_FONT_SIZE 	= "18px";
 	const POPUP_SUMMARY_FONT_SIZE = "16px";
 
-	// module variables
 	let _mapInstance;
 	let _manifest;
 
@@ -24,17 +23,15 @@
     manifest: VIEWER_MANIFEST_URL,
     embedded: true // needed for codesandbox frame
   };
-
   const UV_INSTANCE = UV.init(UV_DIV_ID, data);
 
+	// event listeners for the universal viewer
 	UV_INSTANCE.on("load", function() {
 	    console.log("Universal Viewer is loaded.");
 	});
-
 	UV_INSTANCE.on("manifestIndexChange", function (manifestIndex) {
 	    console.log("Manifest loaded, index: " + manifestIndex);
 	});
-
 	UV_INSTANCE.on("canvasIndexChange", function (canvasIndex) {
 		let canvas = _manifest.items[canvasIndex];
 		let canvasId = parseInt( canvas.id.substring( canvas.id.lastIndexOf('/')+1 ) );
@@ -54,6 +51,7 @@
 	* code derived from: "https://iiif.io/guides/guides/navplace/"
 	* 
 	* Initialize the Leaflet Map. The map will need to know the GeoJSON from navPlace to draw it. This function assumes you are passing in the resolved Manifest JSON as a parameter. In other implementations, it may be necessary to perform a GET request to get the JSON. In javascript, the fetch API is a good place to start.
+	* @param {*} manifestObject
 	*/
 	function initializeLeafletMap(manifestObject) {
 	  _mapInstance = L.map('leafletInstanceContainer')
@@ -113,8 +111,10 @@
 	}
 
   /**
-    A helper function for Leaflet. Leaflet sees GeoJSON objects as "features". This function says what to do with each feature when adding the feature to the map. Here is where you detect what metadata appears in the pop-ups. For our purposes, we assume the metadata you want to show is in the GeoJSON 'properties' property. Our 'label' and 'summary' will be formatted as language maps, since they are most likely coming directly from a IIIF resource type and IIIF Presentation API 3 requires 'label' and 'summary' to be formatted as a language map.
-  */
+	 * A helper function for Leaflet. Leaflet sees GeoJSON objects as "features". This function says what to do with each feature when adding the feature to the map. Here is where you detect what metadata appears in the pop-ups. For our purposes, we assume the metadata you want to show is in the GeoJSON 'properties' property. Our 'label' and 'summary' will be formatted as language maps, since they are most likely coming directly from a IIIF resource type and IIIF Presentation API 3 requires 'label' and 'summary' to be formatted as a language map.
+	 * @param {*} feature 
+	 * @param {*} layer 
+	 */
   function pointEachFeature(feature, layer){
   	let popupContent = "";
 
@@ -129,6 +129,10 @@
     layer.bindPopup(popupContent)
   }
 
+	/**
+	 * Find the map layer by feature id that matches the canvas id, and set the style to the highlight color and open the popup. Set all other layers to the default color. This function is called when the canvas index changes in the Universal Viewer, and the canvas id is passed in as a parameter. The function iterates through all the layers on the map, checks if the layer has a feature with an id that matches the canvas id, and if so, sets the style to the highlight color and opens the popup. If not, it sets the style to the default color.
+	 * @param {*} canvasId 
+	 */
   function setActiveLocation(canvasId) {
 		// open geojson popup for the feature with the same id as the canvas (at thumbnail index) e.g. get id from canvas at index 2 (manifest.items[2]) and set active the feature with the same id 
 		_mapInstance.eachLayer(function (layer) { // is there no way to get the layer by index directly? (not that I can find in the documentation) 
