@@ -1,24 +1,24 @@
-# Universal Viewer with Map 
+## Universal Viewer with Map 
 
-## contact
+### contact
 
-### developer
+#### developer
 
 Jeff Rynhart
 University of Denver
 jeff.rynhart@du.edu
 
-# description
+### description
 
 This app utilizes the "navPlace" property in a IIIF manifest (v3). One feature per canvas can be defined to contain a single point location (or other feature type), and this feature will be displayed at the location on the map.
 
 The map will display one feature at a location on the map for each canvas in the IIIF manifest. Currently this feature is a single point marking the location. When a canvas is selected in the UniversalViewer, the point will change to a highlight color and a popup window will appear that can contain custom text (as html content)
 
-# installation
+### installation
 
-## dependencies
+#### dependencies
 
-### universalviewer
+##### universalviewer
 
 1. clone the universalviewer into libs/ 
 
@@ -34,9 +34,9 @@ The map will display one feature at a location on the map for each canvas in the
 
 - run npm run build" from universalviewer folder
 
-# specifications
+### specifications
 
-## feature ids
+#### feature ids
 
 - When a thumbnail image is clicked on the UV, the thumbnail index is used to select the canvas at the same index in the manifest "items" array. For example if the first thumbnail is clicked, that is index 0 (first thumbnail in the list) This will result in the selection of the canvas at index 0 in the "items" array (first canvas), and the feature(s) defined in the canvas will be set as active on the map.
 
