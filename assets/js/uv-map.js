@@ -54,20 +54,20 @@
 	* @param {*} manifestObject
 	*/
 	function initializeLeafletMap(manifestObject) {
-	  _mapInstance = L.map('leafletInstanceContainer')
+		_mapInstance = L.map('leafletInstanceContainer')
 
-	  let leafletOptions = {
-	    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	    maxZoom: 19
-	  }
+		let leafletOptions = {
+	  	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	  	maxZoom: 19
+		}
 
 		/**
 		  Define the base map projection of the Earth that you want (satellite, elevation, infrared, etc.)
 		  The projections are powered by Tile Service providers. You can find examples at http://leaflet-extras.github.io/leaflet-providers/preview/
 		*/
 		L.tileLayer(
-		  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
-		  leafletOptions
+			'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+			leafletOptions
 		).addTo(_mapInstance)
 
 		_mapInstance.setView(
@@ -77,35 +77,35 @@
 
 		//Add the GeoJSON from the Manifest object
 		L.geoJSON(manifestObject.navPlace, {
-		  pointToLayer: function (feature, latlng) {
-				 
-		    return L.circleMarker(latlng, {
-		      radius: 8,
-		      fillColor: DEFAULT_POINT_COLOR,
-		      color: "#000",
-		      weight: 1,
-		      opacity: 1,
-		      fillOpacity: 0.8
-		    });
-		  },
-		  onEachFeature: pointEachFeature
+			pointToLayer: function (feature, latlng) {
+				
+		  	return L.circleMarker(latlng, {
+		    	radius: 8,
+		    	fillColor: DEFAULT_POINT_COLOR,
+		    	color: "#000",
+		    	weight: 1,
+		    	opacity: 1,
+		    	fillOpacity: 0.8
+				});
+			},
+			onEachFeature: pointEachFeature
 		}).addTo(_mapInstance);
 
 		//Add the GeoJSON from the Canvas objects
 		manifestObject.items.forEach((canvasObject) => {
 			L.geoJSON(canvasObject.navPlace, {
-			  pointToLayer: function (feature, latlng) {
-					 
-			    return L.circleMarker(latlng, {
-			      radius: 8,
-			      fillColor: DEFAULT_POINT_COLOR,
-			      color: "#000",
-			      weight: 1,
-			      opacity: 1,
-			      fillOpacity: 0.8
-			    });
-			  },
-			  onEachFeature: pointEachFeature
+				pointToLayer: function (feature, latlng) {
+
+			  	return L.circleMarker(latlng, {
+			    	radius: 8,
+			    	fillColor: DEFAULT_POINT_COLOR,
+			    	color: "#000",
+			    	weight: 1,
+			    	opacity: 1,
+			    	fillOpacity: 0.8
+			 		});
+				},
+				onEachFeature: pointEachFeature
 			}).addTo(_mapInstance);
 		});
 	}
@@ -115,32 +115,32 @@
 	 * @param {*} feature 
 	 * @param {*} layer 
 	 */
-  function pointEachFeature(feature, layer){
-  	let popupContent = "";
+	function pointEachFeature(feature, layer){
+ 		let popupContent = "";
 
-    if (feature.properties) {
+  	if (feature.properties) {
 
-      if(feature.properties.label.en) {
-        popupContent += 
+    	if(feature.properties.label.en) {
+      	popupContent += 
 
 					`<div style="font-size: ${POPUP_LABEL_FONT_SIZE}">
 						<strong>
 							${feature.properties.label.en.toString()}
 						</strong>
 					</div>`;
-      }
+    	}
 
-      if(feature.properties.summary?.en) {
-        popupContent += 
-				
+    	if(feature.properties.summary?.en) {
+      	popupContent += 
+			
 					`<br>
 					<div style="font-size: ${POPUP_SUMMARY_FONT_SIZE}">
 						${feature.properties.summary.en.toString()}
 					</div>`
-      }
-    }
-    layer.bindPopup(popupContent)
-  }
+    	}
+  	}
+  	layer.bindPopup(popupContent)
+	}
 
 	/**
 	 * Find the map layer by feature id that matches the canvas id, and set the style to the highlight color and open the popup. Set all other layers to the default color. This function is called when the canvas index changes in the Universal Viewer, and the canvas id is passed in as a parameter. The function iterates through all the layers on the map, checks if the layer has a feature with an id that matches the canvas id, and if so, sets the style to the highlight color and opens the popup. If not, it sets the style to the default color.
@@ -164,5 +164,4 @@
 			}
 		});
 	}
-
 }();
